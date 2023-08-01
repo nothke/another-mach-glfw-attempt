@@ -1,5 +1,31 @@
 const std = @import("std");
 
+fn glfwLink(b: *std.Build, step: *std.build.CompileStep) void {
+    const glfw_dep = b.dependency("mach_glfw", .{
+        .target = step.target,
+        .optimize = step.optimize,
+    });
+    step.linkLibrary(glfw_dep.artifact("mach-glfw"));
+    step.addModule("glfw", glfw_dep.module("mach-glfw"));
+
+    // TODO(build-system): Zig package manager currently can't handle transitive deps like this, so we need to use
+    // these explicitly here:
+    @import("glfw").addPaths(step);
+    //if (step.target.toTarget().isDarwin()) xcode_frameworks.addPaths(b, step);
+    step.linkLibrary(b.dependency("vulkan_headers", .{
+        .target = step.target,
+        .optimize = step.optimize,
+    }).artifact("vulkan-headers"));
+    step.linkLibrary(b.dependency("x11_headers", .{
+        .target = step.target,
+        .optimize = step.optimize,
+    }).artifact("x11-headers"));
+    step.linkLibrary(b.dependency("wayland_headers", .{
+        .target = step.target,
+        .optimize = step.optimize,
+    }).artifact("wayland-headers"));
+}
+
 // Although this function looks imperative, note that its job is to
 // declaratively construct a build graph that will be executed by an external
 // runner.
@@ -23,6 +49,8 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
+
+    glfwLink(b, exe);
 
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default
