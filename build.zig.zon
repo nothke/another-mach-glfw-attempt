@@ -1,0 +1,11 @@
+.{
+    .name = "another-mach-glfw",
+    .version = "0.0.1",
+
+    .dependencies = .{
+        .mach_glfw = .{
+            .url = "https://github.com/hexops/mach-glfw/archive/44a2bf47a656058c396ac421edf2adeceacddce5.tar.gz",
+            .hash = "122018369654d1ec328765194f7853a425897d47797dff52dbd2a41040cfec918277",
+        },
+    },
+}
