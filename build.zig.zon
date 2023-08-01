@@ -1,5 +1,5 @@
 .{
-    .name = "another-mach-glfw",
+    .name = "another-mach-glfw-attempt",
     .version = "0.0.1",
 
     .dependencies = .{
